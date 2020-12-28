@@ -4,15 +4,11 @@ project(station)
 set(LIB_TARGET ${PROJECT_NAME}${PLATFORM_EXEC_SUFFIX})
 
 set(SOURCES
-  ./Source/bme280.cpp
+  ./Source/station.cpp
   )
 
-set(HEADERS
-  ./Include/station/BME280/bme280.h
-  ./Include/station/BME280/BME280CalibrationData.h
-  ./Include/station/BME280/BME280Data.h
-  ./Include/station/BME280/BME280RawData.h
-  )
+# set(HEADERS
+#   )
 
 add_definitions(-lwiringPi)
 
@@ -23,5 +19,9 @@ target_include_directories(${LIB_TARGET}
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Include/${PROJECT_NAME})
 
 target_compile_definitions(${LIB_TARGET} PUBLIC TMS320C66X)
+
+target_link_libraries(${LIB_TARGET}
+  bme${PLATFORM_EXEC_SUFFIX}
+  )
 
 # target_add_ide_support(${LIB_TARGET})

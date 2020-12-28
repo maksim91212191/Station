@@ -14,6 +14,7 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif()
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/../ ${CMAKE_BINARY_DIR}/Station)
+add_subdirectory(${CMAKE_SOURCE_DIR}/../../BME280 ${CMAKE_BINARY_DIR}/bme)
 
 set(SOURCES ${SOURCES}
   ./Source/main.cpp
@@ -25,6 +26,7 @@ add_executable(${EXEC_TARGET} ${SOURCES} ${HEADERS})
 
 target_link_libraries(${EXEC_TARGET}
   station${PLATFORM_EXEC_SUFFIX}
+  bme${PLATFORM_EXEC_SUFFIX}
   pthread
   rt
   dl
