@@ -11,7 +11,7 @@
 
 int main() {
     std::cout << "Main" << std::endl;
-  /*try {
+  try {
     BME280 * bme280 = new BME280(BME280_I2C_ADDRESS1);
     int fd = bme280->init();
     bme280->reset();
@@ -58,6 +58,6 @@ int main() {
     delete bme280;
   } catch (std::exception & e) {
     printf("%s\n", e.what());
-  }*/
+  }
   return 0;
 }

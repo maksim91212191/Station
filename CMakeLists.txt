@@ -10,7 +10,8 @@ set(SOURCES
 # set(HEADERS
 #   )
 
-add_definitions(-lwiringPi)
+# add_definitions(-L/home/WiringPi/wiringPi -lwiringPi)
+find_library(wiringPi_LIB wiringPi)
 
 add_library(${LIB_TARGET} ${SOURCES} ${HEADERS})
 
@@ -21,6 +22,7 @@ target_include_directories(${LIB_TARGET}
 target_compile_definitions(${LIB_TARGET} PUBLIC TMS320C66X)
 
 target_link_libraries(${LIB_TARGET}
+  ${wiringPi_LIB}
   bme${PLATFORM_EXEC_SUFFIX}
   )
 
