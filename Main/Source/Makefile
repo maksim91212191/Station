@@ -1,2 +1,2 @@
 all:
-	~/diploma/buildscript/build -m d -f
+	~/diploma/buildscripts/build -m d -f
