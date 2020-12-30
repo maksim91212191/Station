@@ -19,7 +19,7 @@ int main() {
     BME280* bme2800 = new BME280(device0, devId0);
     BME280* bme2801 = new BME280(device1, devId1);
     int fd0 = bme2800->init();
-    itn fd1 = bme2801->init();
+    int fd1 = bme2801->init();
     bme2800->reset();
     bme2801->reset();
 
