@@ -20,7 +20,7 @@ int main() {
     int fd0 = bme2800->init();
     bme2800->reset();
 
-    if (fd0 < 0 || fd1 < 0) {
+    if (fd0 < 0) {
       printf("Device not found");
       return -1;
     }
@@ -28,10 +28,6 @@ int main() {
     printf("fd       : 0x%02x\n", fd0);
     printf("chip id  : 0x%02x\n", bme2800->getChipId());
     printf("chip ver : 0x%02x\n", bme2800->getChipVersion());
-
-    printf("fd       : 0x%02x\n", fd1);
-    printf("chip id  : 0x%02x\n", bme2801->getChipId());
-    printf("chip ver : 0x%02x\n", bme2801->getChipVersion());
 
     bme2800->reset();
     bme2800->setPowerMode(BME280_NORMAL_MODE);
