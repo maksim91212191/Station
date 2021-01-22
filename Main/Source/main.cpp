@@ -11,17 +11,14 @@
 
 int main() {
     char* device0 = "/dev/i2c-0";
-    char* device1 = "/dev/i2c-1";
 
     int devId0 = BME280_I2C_ADDRESS1;
-    int devId1 = BME280_I2C_ADDRESS2;
+
   try {
+
     BME280* bme2800 = new BME280(device0, devId0);
-    BME280* bme2801 = new BME280(device1, devId1);
     int fd0 = bme2800->init();
-    int fd1 = bme2801->init();
     bme2800->reset();
-    bme2801->reset();
 
     if (fd0 < 0 || fd1 < 0) {
       printf("Device not found");
