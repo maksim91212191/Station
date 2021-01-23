@@ -122,7 +122,7 @@ namespace Station {                  /*Station*/
     void Station::Loop() {
         std::thread thrBME(&Station::LoopBME, this);
 
-        thrBME.join();
+        // thrBME.join();
     }
 
 }   /*Station*/
