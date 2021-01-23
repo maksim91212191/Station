@@ -14,7 +14,7 @@ int main(int argc, char* argv[]) {
 
     std::thread thrBME(station->LoopBME());
 
-    htrBME.join();
+    thrBME.join();
 
     return app.exec();
     } catch (std::exception& ex) {
