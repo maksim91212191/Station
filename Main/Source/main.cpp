@@ -22,7 +22,7 @@ int main() {
 
         for (size_t i = 0; i < 3; ++i) {
             std::cout << "Dev num  : " << BMENum[i] << std::endl;
-            if (wiringPiI2CWrite(fdTCA, 1 << BMENum[i]) <= 0) {
+            if (wiringPiI2CWrite(fdTCA, 1 << BMENum[i]) < 0) {
                 std::cout << "Multiplexer channel changing error\n";
                 return -1;
             }
@@ -65,7 +65,7 @@ int main() {
         }
         while (1) {
             for (size_t i = 0; i < 3; ++i) {
-                if (wiringPiI2CWrite(fdTCA, 1 << BMENum[i]) <= 0) {
+                if (wiringPiI2CWrite(fdTCA, 1 << BMENum[i]) < 0) {
                     std::cout << "Dev num  : " << BMENum[i] << "\nMultiplexer channel changing error\n";
                     return -1;
                 }
