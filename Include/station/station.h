@@ -2,6 +2,7 @@
 #define STATION_H
 
 #include <QWidget>
+#include <QMainWindow>
 #include <QString>
 #include <QPalette>
 #include <QLabel>
@@ -23,7 +24,7 @@
 #define devIdBME BME280_I2C_ADDRESS1
 
 namespace Station {                        /*Station*/
-    class Station : public QWidget {
+    class Station : public QMainWindow {
         Q_OBJECT
     public:
         Station(QWidget* parent = nullptr);
