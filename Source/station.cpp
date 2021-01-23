@@ -79,15 +79,20 @@ namespace Station {                  /*Station*/
         } catch (std::exception& e) {
             fprintf(logs, "%s\n", e.what());
         }
+        std::fclose(logs);
     }
 
     Station::~Station() {
         delete[] BMENum;
         delete bme280;
-        std::fclose(logs);
     }
 
     void Station::LoopBME() {
+
+        if (!(logs = std::fopen("logs.txt", "a"))) {
+            std::cout << "Logs error\n";
+        }
+
         while (1) {
             for (size_t i = 0; i < 3; ++i) {
                 if (wiringPiI2CWrite(fdTCA, 1 << BMENum[i]) < 0) {
@@ -111,6 +116,7 @@ namespace Station {                  /*Station*/
                 emit NewBMEData(str);
             }
         }
+        fclose(logs);
     }
 
 }   /*Station*/
