@@ -10,8 +10,11 @@ set(SOURCES
 # set(HEADERS
 #   )
 
-# add_definitions(-L/home/WiringPi/wiringPi -lwiringPi)
 find_library(wiringPi_LIB wiringPi)
+
+find_package(Qt5Core REQUIRED)
+find_package(Qt5Gui REQUIRED)
+find_package(Qt5Widgets REQUIRED)
 
 add_library(${LIB_TARGET} ${SOURCES} ${HEADERS})
 
@@ -22,8 +25,9 @@ target_include_directories(${LIB_TARGET}
 target_compile_definitions(${LIB_TARGET} PUBLIC TMS320C66X)
 
 target_link_libraries(${LIB_TARGET}
+  Qt5::Core
+  Qt5::Gui
+  Qt5::Widgets
   ${wiringPi_LIB}
   bme${PLATFORM_EXEC_SUFFIX}
   )
-
-# target_add_ide_support(${LIB_TARGET})
