@@ -19,12 +19,14 @@ int main() {
     try {
         int fdTCA = wiringPiI2CSetup(devIdTCA);
 
-        BME280* bme280 = new BME280(device0, devIdBME);
         for (size_t i = 0; i < 3; ++i) {
             std::cout << "Dev addr : " << (1<<BMENum[i]) << std::endl;
             if (wiringPiI2CWrite(fdTCA, 1 << BMENum[i]) <= 0) {
                 std::cout << "Multiplexer channel changing error\n";
                 return -1;
+            }
+            if (i == 0) {
+                BME280* bme280 = new BME280(device0, devIdBME);
             }
             int fdBME = bme280->init();
             bme280->reset();
