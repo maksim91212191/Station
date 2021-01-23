@@ -9,11 +9,13 @@
 #include <wiringPi.h>
 #include <station/station.h>
 #include <bme/bme280.h>
+#include <QApplication>
 
 #define devIdTCA 0x70
 #define devIdBME BME280_I2C_ADDRESS1
 
-int main() {
+int main(int argc, char* argv[]) {
+    QApplication app(argc, argv);
     char* device0 = "/dev/i2c-1";
     int BMENum[3] = {2, 4, 7};
     BME::BME280* bme280;
@@ -85,5 +87,5 @@ int main() {
     } catch (std::exception & e) {
         printf("%s\n", e.what());
     }
-    return 0;
+    return app.exec();
 }

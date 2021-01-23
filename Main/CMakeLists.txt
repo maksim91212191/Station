@@ -16,6 +16,9 @@ endif()
 add_subdirectory(${CMAKE_SOURCE_DIR}/../ ${CMAKE_BINARY_DIR}/station)
 add_subdirectory(${CMAKE_SOURCE_DIR}/../../BME280 ${CMAKE_BINARY_DIR}/bme)
 
+find_package(Qt5Core REQUIRED)
+find_package(Qt5Widgets REQUIRED)
+
 set(SOURCES ${SOURCES}
   ./Source/main.cpp
   )
@@ -25,6 +28,8 @@ set(SOURCES ${SOURCES}
 add_executable(${EXEC_TARGET} ${SOURCES} ${HEADERS})
 
 target_link_libraries(${EXEC_TARGET}
+  Qt5::Core
+  Qt5::Widgets
   station${PLATFORM_EXEC_SUFFIX}
   bme${PLATFORM_EXEC_SUFFIX}
   pthread
