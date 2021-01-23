@@ -13,7 +13,7 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
   file(MAKE_DIRECTORY ${CMAKE_INSTALL_PREFIX}/Bin/tmp)
 endif()
 
-add_subdirectory(${CMAKE_SOURCE_DIR}/../ ${CMAKE_BINARY_DIR}/Station)
+add_subdirectory(${CMAKE_SOURCE_DIR}/../ ${CMAKE_BINARY_DIR}/station)
 add_subdirectory(${CMAKE_SOURCE_DIR}/../../BME280 ${CMAKE_BINARY_DIR}/bme)
 
 set(SOURCES ${SOURCES}

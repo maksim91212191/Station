@@ -7,8 +7,9 @@ set(SOURCES
   ./Source/station.cpp
   )
 
-# set(HEADERS
-#   )
+ set(HEADERS
+   ./Include/station/station.h
+   )
 
 find_library(wiringPi_LIB wiringPi)
 
@@ -20,7 +21,7 @@ add_library(${LIB_TARGET} ${SOURCES} ${HEADERS})
 
 target_include_directories(${LIB_TARGET}
   PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Include
-  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Include/${PROJECT_NAME})
+  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Include/station)
 
 target_compile_definitions(${LIB_TARGET} PUBLIC TMS320C66X)
 

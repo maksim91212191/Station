@@ -7,6 +7,7 @@
 #include <math.h>
 #include <wiringPiI2C.h>
 #include <wiringPi.h>
+#include <station/station.h>
 #include <bme/bme280.h>
 
 #define devIdTCA 0x70
@@ -15,7 +16,9 @@
 int main() {
     char* device0 = "/dev/i2c-1";
     int BMENum[3] = {2, 4, 7};
-    BME280* bme280;
+    BME::BME280* bme280;
+    Station::Station* station = new Station::Station;
+    station->show();
 
     try {
         int fdTCA = wiringPiI2CSetup(devIdTCA);
@@ -27,7 +30,7 @@ int main() {
                 return -1;
             }
             if (i == 0) {
-                bme280 = new BME280(device0, devIdBME);
+                bme280 = new BME::BME280(device0, devIdBME);
             }
             int fdBME = bme280->init();
             bme280->reset();
@@ -70,7 +73,7 @@ int main() {
                     return -1;
                 }
                 delay(1000);
-                BMP280Data * bme280Data = bme280->getBMP280Data();
+                BME::BMP280Data * bme280Data = bme280->getBMP280Data();
                 printf("pressure   : %.2f \tmm Hg\n", bme280Data->getPressure() / 1.3332239);
                 printf("humidity   : %.2f \t%c\n", bme280Data->getHumidity(), '%');
                 printf("temperature: %.2f \t°C\n", bme280Data->getTemperature());
