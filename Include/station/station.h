@@ -28,7 +28,7 @@ namespace Station {                        /*Station*/
     public:
         Station(QWidget* parent = nullptr);
         virtual ~Station();
-        void LoopBME();
+        void Loop();
 
     signals:
         void NewBMEData(QString str);
@@ -42,6 +42,8 @@ namespace Station {                        /*Station*/
         QHBoxLayout* layBME;
         QLabel*      labBMETags;
         QLabel*      labBMEInfo;
+
+        void LoopBME();
     };
 }    /*Station*/
 

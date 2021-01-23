@@ -12,9 +12,7 @@ int main(int argc, char* argv[]) {
     Station::Station* station = new Station::Station;
     station->show();
 
-    std::thread thrBME(station->LoopBME());
-
-    thrBME.join();
+    station->Loop();
 
     return app.exec();
     } catch (std::exception& ex) {
