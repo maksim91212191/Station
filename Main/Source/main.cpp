@@ -11,6 +11,8 @@ int main(int argc, char* argv[]) {
     Station::Station* station = new Station::Station;
     station->show();
 
+    station->LoopBME();
+
     return app.exec();
     } catch (std::exception& ex) {
             return -1;
