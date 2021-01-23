@@ -2,7 +2,7 @@
 
 namespace Station {                  /*Station*/
     Station::Station(QWidget* parent)
-        : QMainWindow(parent) {
+        : QWidget(parent) {
         setFixedSize(1024, 600);
 
         palBack.setColor(QPalette::Background, QColor(0, 189, 222));

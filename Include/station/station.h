@@ -24,7 +24,7 @@
 #define devIdBME BME280_I2C_ADDRESS1
 
 namespace Station {                        /*Station*/
-    class Station : public QMainWindow {
+    class Station : public QWidget {
         Q_OBJECT
     public:
         Station(QWidget* parent = nullptr);
