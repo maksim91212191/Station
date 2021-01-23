@@ -11,8 +11,8 @@ int main(int argc, char* argv[]) {
 
     Station::Station* station = new Station::Station;
     QMainWindow mw;
-    mw->setCentralWidget(station);
-    mw->show();
+    mw.setCentralWidget(station);
+    mw.show();
 
     station->Loop();
 
