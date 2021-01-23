@@ -9,59 +9,73 @@
 #include <wiringPi.h>
 #include <bme/bme280.h>
 
+#define devIdTCA 0x70
+#define devIdBME BME280_I2C_ADDRESS1
+
 int main() {
     char* device0 = "/dev/i2c-1";
-    int devIdTCA = 0x70;
+    int BMENum[3] = {2, 4, 7};
 
     try {
         int fdTCA = wiringPiI2CSetup(devIdTCA);
-        wiringPiI2CWrite(fdTCA, 1<<2);
 
-        int devId0 = BME280_I2C_ADDRESS1;
-        BME280* bme2800 = new BME280(device0, devId0);
-        int fd0 = bme2800->init();
-        bme2800->reset();
+        BME280* bme280 = new BME280(device0, devIdBME);
+        for (size_t i = 0; i < 3; ++i) {
+            std::cout << "Dev addr : " << (1<<BMENum[i]) << std::endl;
+            if (wiringPiI2CWrite(fdTCA, 1 << BMENum[i]) <= 0) {
+                std::cout << "Multiplexer channel changing error\n";
+                return -1;
+            }
+            int fdBME = bme280->init();
+            bme280->reset();
 
-        if (fd0 < 0) {
-            printf("Device not found");
-            return -1;
+            if (fdBME < 0) {
+                printf("Device not found");
+                return -1;
+            }
+
+            printf("fd       : 0x%02x\n", fdBME);
+            printf("chip id  : 0x%02x\n", bme280 ->getChipId());
+            printf("chip ver : 0x%02x\n", bme280->getChipVersion());
+
+            bme280->reset();
+            bme280->setPowerMode(BME280_NORMAL_MODE);
+            bme280->setTemperatureOversampling(BME280_ULTRAHIGHRESOLUTION_OVERSAMP_TEMPERATURE);
+            bme280->setPressureOversampling(BME280_ULTRAHIGHRESOLUTION_OVERSAMP_PRESSURE);
+            bme280->setHumidityOversampling(BME280_ULTRAHIGHRESOLUTION_OVERSAMP_HUMIDITY);
+            bme280->setIrrFilter(BME280_FILTER_COEFF_16);
+            bme280->setStandbyTime(BME280_STANDBY_TIME_250_MS);
+
+            printf("---------------\n");
+            printf("pw mode  : 0x%02x\n", bme280->getPowerMode());
+            printf("osrs_p   : 0x%02x\n", bme280->getPressureOversampling());
+            printf("osrs_t   : 0x%02x\n", bme280->getTemperatureOversampling());
+            printf("osrs_h   : 0x%02x\n", bme280->getHumidityOversampling());
+            printf("---------------\n");
+            printf("filter   : 0x%02x\n", bme280->getIrrFilter());
+            printf("t_sb     : 0x%02x\n", bme280->getStandbyTime());
+            printf("---------------\n");
+            printf("spi3w sts: 0x%02x\n", bme280->getSpi3w());
+            printf("measuring: 0x%02x\n", bme280->getMeasuringStatus());
+            printf("im_update: 0x%02x\n", bme280->getImUpdateStatus());
+            printf("---------------\n");
         }
-
-        printf("fd       : 0x%02x\n", fd0);
-        printf("chip id  : 0x%02x\n", bme2800->getChipId());
-        printf("chip ver : 0x%02x\n", bme2800->getChipVersion());
-
-        bme2800->reset();
-        bme2800->setPowerMode(BME280_NORMAL_MODE);
-        bme2800->setTemperatureOversampling(BME280_ULTRAHIGHRESOLUTION_OVERSAMP_TEMPERATURE);
-        bme2800->setPressureOversampling(BME280_ULTRAHIGHRESOLUTION_OVERSAMP_PRESSURE);
-        bme2800->setHumidityOversampling(BME280_ULTRAHIGHRESOLUTION_OVERSAMP_HUMIDITY);
-        bme2800->setIrrFilter(BME280_FILTER_COEFF_16);
-        bme2800->setStandbyTime(BME280_STANDBY_TIME_250_MS);
-
-        printf("---------------\n");
-        printf("pw mode  : 0x%02x\n", bme2800->getPowerMode());
-        printf("osrs_p   : 0x%02x\n", bme2800->getPressureOversampling());
-        printf("osrs_t   : 0x%02x\n", bme2800->getTemperatureOversampling());
-        printf("osrs_h   : 0x%02x\n", bme2800->getHumidityOversampling());
-        printf("---------------\n");
-        printf("filter   : 0x%02x\n", bme2800->getIrrFilter());
-        printf("t_sb     : 0x%02x\n", bme2800->getStandbyTime());
-        printf("---------------\n");
-        printf("spi3w sts: 0x%02x\n", bme2800->getSpi3w());
-        printf("measuring: 0x%02x\n", bme2800->getMeasuringStatus());
-        printf("im_update: 0x%02x\n", bme2800->getImUpdateStatus());
-        printf("---------------\n");
-
         while (1) {
-            delay(1000);
-            BMP280Data * bme2800Data = bme2800->getBMP280Data();
-            printf("pressure   : %.2f \tmm Hg\n", bme2800Data->getPressure() / 1.3332239);
-            printf("humidity   : %.2f \t%c\n", bme2800Data->getHumidity(), '%');
-            printf("temperature: %.2f \t°C\n", bme2800Data->getTemperature());
-            printf("altitude   : %.2f \tm\n\n", bme2800Data->getAltitude());
+            for (size_t i = 0; i < 3; ++i) {
+                if (wiringPiI2CWrite(fdTCA, 1 << BMENum[i]) <= 0) {
+                    std::cout << "Dev addr : " << (1<<BMENum[i]) << "\nMultiplexer channel changing error\n";
+                    return -1;
+                }
+                delay(1000);
+                BMP280Data * bme280Data = bme280->getBMP280Data();
+                printf("pressure   : %.2f \tmm Hg\n", bme280Data->getPressure() / 1.3332239);
+                printf("humidity   : %.2f \t%c\n", bme280Data->getHumidity(), '%');
+                printf("temperature: %.2f \t°C\n", bme280Data->getTemperature());
+                printf("altitude   : %.2f \tm\n\n", bme280Data->getAltitude());
+            }
         }
-        delete bme2800;
+        delete bme280;
+
     } catch (std::exception & e) {
         printf("%s\n", e.what());
     }
