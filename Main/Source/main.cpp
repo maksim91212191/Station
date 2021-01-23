@@ -15,6 +15,7 @@
 int main() {
     char* device0 = "/dev/i2c-1";
     int BMENum[3] = {2, 4, 7};
+    BME280* bme280;
 
     try {
         int fdTCA = wiringPiI2CSetup(devIdTCA);
@@ -26,7 +27,7 @@ int main() {
                 return -1;
             }
             if (i == 0) {
-                BME280* bme280 = new BME280(device0, devIdBME);
+                bme280 = new BME280(device0, devIdBME);
             }
             int fdBME = bme280->init();
             bme280->reset();
