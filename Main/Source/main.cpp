@@ -16,9 +16,12 @@
 
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
+    QCoreApplication::setApplicationName("MeteoStation");
+
     char* device0 = "/dev/i2c-1";
     int BMENum[3] = {2, 4, 7};
     BME::BME280* bme280;
+
     Station::Station* station = new Station::Station;
     station->show();
 
@@ -68,6 +71,9 @@ int main(int argc, char* argv[]) {
             printf("im_update: 0x%02x\n", bme280->getImUpdateStatus());
             printf("---------------\n");
         }
+
+        app.exec();
+
         while (1) {
             for (size_t i = 0; i < 3; ++i) {
                 if (wiringPiI2CWrite(fdTCA, 1 << BMENum[i]) < 0) {
@@ -87,5 +93,5 @@ int main(int argc, char* argv[]) {
     } catch (std::exception & e) {
         printf("%s\n", e.what());
     }
-    return app.exec();
+    return 1;
 }

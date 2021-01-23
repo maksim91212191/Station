@@ -3,6 +3,10 @@
 namespace Station {
     Station::Station(QWidget* parent)
         : QWidget(parent) {
-        setFixedSize(500, 500);
+        setFixedSize(1024, 600);
+
+        palBack.setColor(QPalette::Background, QColor(0, 189, 222));
+        setAutoFillBackground(true);
+        setPalette(palBack);
     }
 }
