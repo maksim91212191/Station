@@ -9,13 +9,13 @@ namespace Station {                  /*Station*/
         setAutoFillBackground(true);
         setPalette(palBack);
 
-        //labBMETags = new QLabel("Pressure\nHumidity\nTemperature\n", this);
-        //labBMEInfo = new QLabel("", this);
+        labBMETags = new QLabel("Pressure\nHumidity\nTemperature\n", this);
+        labBMEInfo = new QLabel("", this);
 
-        // layBME = new QHBoxLayout();
-        // layBME->addWidget(labBMETags);
-        // layBME->addWidget(labBMEInfo);
-        // setLayout(layBME);
+        layBME = new QHBoxLayout();
+        layBME->addWidget(labBMETags);
+        layBME->addWidget(labBMEInfo);
+        setLayout(layBME);
 
         char* device0 = "/dev/i2c-1";
         BMENum = new int(3);
@@ -74,7 +74,7 @@ namespace Station {                  /*Station*/
                 std::fprintf(logs, "---------------\n");
             }
 
-            // connect(this, SIGNAL(NewBMEData(QString)), labBMEInfo, SLOT(setText(QString)));
+            connect(this, SIGNAL(NewBMEData(QString)), labBMEInfo, SLOT(setText(QString)));
 
         } catch (std::exception& e) {
             fprintf(logs, "%s\n", e.what());
