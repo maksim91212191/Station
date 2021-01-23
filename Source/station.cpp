@@ -9,10 +9,10 @@ namespace Station {                  /*Station*/
         setAutoFillBackground(true);
         setPalette(palBack);
 
-        labBMETags = new QLabel("Pressure\nHumidity\nTemperature\n");
-        labBMEInfo = new QLabel("");
+        labBMETags = new QLabel("Pressure\nHumidity\nTemperature\n", this);
+        labBMEInfo = new QLabel("", this);
 
-        layBME = new QHBoxLayout;
+        layBME = new QHBoxLayout();
         layBME->addWidget(labBMETags);
         layBME->addWidget(labBMEInfo);
         setLayout(layBME);

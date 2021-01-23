@@ -10,9 +10,7 @@ int main(int argc, char* argv[]) {
     QCoreApplication::setApplicationName("MeteoStation");
 
     Station::Station* station = new Station::Station;
-    QMainWindow mw;
-    mw.setCentralWidget(station);
-    mw.show();
+    station->show();
 
     station->Loop();
 
