@@ -17,6 +17,9 @@ find_package(Qt5Core REQUIRED)
 find_package(Qt5Gui REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
 add_library(${LIB_TARGET} ${SOURCES} ${HEADERS})
 
 target_include_directories(${LIB_TARGET}
