@@ -76,9 +76,6 @@ namespace Station {                  /*Station*/
 
             connect(this, SIGNAL(NewBMEData(QString)), labBMEInfo, SLOT(setText(QString)));
 
-            std::thread thrBME(&Station::LoopBME, this);
-            thrBME.join();
-
         } catch (std::exception& e) {
             fprintf(logs, "%s\n", e.what());
         }
