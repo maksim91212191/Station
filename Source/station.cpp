@@ -102,7 +102,7 @@ namespace Station {                  /*Station*/
 
             QString str = QString::number(floor(pressure / 3));
             str += " mm Hg\n";
-            str += QString::number(floor(humidity / 3);
+            str += QString::number(floor(humidity / 3));
             str += " %\n";
             str += QString::number(floor(temperature / 3));
             str += " °C\n";
