@@ -1,13 +1,8 @@
 #include <station/station.h>
 
 namespace Station {                  /*Station*/
-    Station::Station(QWidget* parent)
+    StationBME::StationBME(QWidget* parent)
         : QWidget(parent) {
-        setFixedSize(1024, 600);
-
-        palBack.setColor(QPalette::Background, QColor(0, 189, 222));
-        setAutoFillBackground(true);
-        setPalette(palBack);
 
         labBMETags = new QLabel("Pressure\nHumidity\nTemperature\n", this);
         labBMEInfo = new QLabel("", this);
@@ -23,7 +18,7 @@ namespace Station {                  /*Station*/
         BMENum[1] = 4;
         BMENum[2] = 7;
 
-        if (!(logs = std::fopen("logs.txt", "w"))) {
+        if (!(logs = std::fopen("logsBME.txt", "w"))) {
             std::cout << "Logs error\n";
         }
 
@@ -82,47 +77,74 @@ namespace Station {                  /*Station*/
         std::fclose(logs);
     }
 
-    Station::~Station() {
+    StationBME::~StationBME() {
         delete[] BMENum;
         delete bme280;
     }
 
-    void Station::LoopBME() {
+    void StationBME::Loop() {
 
-        if (!(logs = std::fopen("logs.txt", "a"))) {
+        if (!(logs = std::fopen("logsBME.txt", "a"))) {
             std::cout << "Logs error\n";
         }
 
         while (1) {
+            delay(10000);
+
+            float pressure = 0;
+            float humidity = 0;
+            float temperature = 0;
+
             for (size_t i = 0; i < 3; ++i) {
                 if (wiringPiI2CWrite(fdTCA, 1 << BMENum[i]) < 0) {
                     std::fprintf(logs, "Dev num  : %d\nMultiplexer channel changing error\n", BMENum[i]);
                     throw std::runtime_error("Multiplexer channel changing error");
                 }
-                delay(10000);
                 BME::BMP280Data* bme280Data = bme280->getBMP280Data();
                 std::fprintf(logs, "pressure   : %.2f \tmm Hg\n", bme280Data->getPressure() / 1.3332239);
                 std::fprintf(logs, "humidity   : %.2f \t%c\n", bme280Data->getHumidity(), '%');
                 std::fprintf(logs, "temperature: %.2f \t°C\n", bme280Data->getTemperature());
                 std::fprintf(logs, "altitude   : %.2f \tm\n\n", bme280Data->getAltitude());
 
-                QString str = QString::number(floor(bme280Data->getPressure() / 1.3332239) / 100);
-                str += " mm Hg\n";
-                str += QString::number(floor(bme280Data->getHumidity()) / 100);
-                str += " %\n";
-                str += QString::number(floor(bme280Data->getTemperature()) / 100);
-                str += " °C\n";
-
-                emit NewBMEData(str);
+                pressure += bme280Data->getPressure() / 1.3332239;
+                humidity += bme280Data->getHumidity();
+                temperature += bme280Data->getTemperature();
             }
+
+            QString str = QString::number(floor(pressure / 3) / 100);
+            str += " mm Hg\n";
+            str += QString::number(floor(humidity / 3) / 100);
+            str += " %\n";
+            str += QString::number(floor(temperature / 3) / 100);
+            str += " °C\n";
+
+            emit NewBMEData(str);
         }
         fclose(logs);
     }
 
-    void Station::Loop() {
-        std::thread thrBME(&Station::LoopBME, this);
+    MainWindow::MainWindow(QWidget* parent)
+        : QMainWindow(parent) {
+        setFixedSize(1024, 600);
 
-        // thrBME.join();
+        palBack.setColor(QPalette::Background, QColor(0, 189, 222));
+        setAutoFillBackground(true);
+        setPalette(palBack);
+
+        widBME = new StationBME();
+        setCentralWidget(widBME);
+
+        widBME->moveToThread(&thrBME);
+        connect(&thrBME, SIGNAL(started()), widBME, SLOT(Loop()));
+    }
+
+    MainWindow::~MainWindow() {
+        thrBME.wait();
+        delete widBME;
+    }
+
+    void MainWindow::Loop() {
+        thrBME.start();
     }
 
 }   /*Station*/

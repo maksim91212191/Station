@@ -9,7 +9,7 @@ int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
     QCoreApplication::setApplicationName("MeteoStation");
 
-    Station::Station* station = new Station::Station;
+    Station::MainWindow* station = new Station::MainWindow;
     station->show();
 
     station->Loop();
