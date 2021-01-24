@@ -1,16 +1,7 @@
 #include <station/station.h>
 
 namespace Station {                  /*Station*/
-    StationBME::StationBME(QWidget* parent)
-        : QWidget(parent) {
-
-        labBMETags = new QLabel("Pressure\nHumidity\nTemperature\n", this);
-        labBMEInfo = new QLabel("", this);
-
-        layBME = new QHBoxLayout();
-        layBME->addWidget(labBMETags);
-        layBME->addWidget(labBMEInfo);
-        setLayout(layBME);
+    StationBME::StationBME() {
 
         char* device0 = "/dev/i2c-1";
         BMENum = new int(3);
@@ -69,8 +60,6 @@ namespace Station {                  /*Station*/
                 std::fprintf(logs, "---------------\n");
             }
 
-            connect(this, SIGNAL(NewBMEData(QString)), labBMEInfo, SLOT(setText(QString)));
-
         } catch (std::exception& e) {
             fprintf(logs, "%s\n", e.what());
         }
@@ -125,17 +114,20 @@ namespace Station {                  /*Station*/
 
     MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent) {
+
         setFixedSize(1024, 600);
 
         palBack.setColor(QPalette::Background, QColor(0, 189, 222));
         setAutoFillBackground(true);
         setPalette(palBack);
 
-        widBME = new StationBME();
-        setCentralWidget(widBME);
-
+        widBME = new StationBME;
         widBME->moveToThread(&thrBME);
         connect(&thrBME, SIGNAL(started()), widBME, SLOT(Loop()));
+
+        ui = new UI(this);
+        connect(widBME, SIGNAL(NewBMEData(QString)), ui, SLOT(UpdateBMEInfo(QString)));
+        setCentralWidget(ui);
     }
 
     MainWindow::~MainWindow() {
@@ -145,6 +137,22 @@ namespace Station {                  /*Station*/
 
     void MainWindow::Loop() {
         thrBME.start();
+    }
+
+    UI::UI(QWidget* parent)
+        : QWidget(parent) {
+
+        labBMETags = new QLabel("Pressure\nHumidity\nTemperature\n", this);
+        labBMEInfo = new QLabel("", this);
+
+        layBME = new QHBoxLayout();
+        layBME->addWidget(labBMETags);
+        layBME->addWidget(labBMEInfo);
+        setLayout(layBME);
+    }
+
+    void UI::UpdateBMEInfo(QString str) {
+        labBMEInfo->setText(str);
     }
 
 }   /*Station*/

@@ -25,10 +25,10 @@
 #define devIdBME BME280_I2C_ADDRESS1
 
 namespace Station {                        /*Station*/
-    class StationBME : public QWidget {
+    class StationBME : public QObject {
         Q_OBJECT
     public:
-        StationBME(QWidget* parent = nullptr);
+        StationBME();
         virtual ~StationBME();
     public slots:
         void Loop();
@@ -41,10 +41,22 @@ namespace Station {                        /*Station*/
         int          fdTCA;
         BME::BME280* bme280;
         std::FILE*   logs;
-        QHBoxLayout* layBME;
-        QLabel*      labBMETags;
-        QLabel*      labBMEInfo;
     };
+
+    class UI : public QWidget {
+        Q_OBJECT
+    public:
+        UI(QWidget* parent = nullptr);
+
+        public slots:
+            void UpdateBMEInfo(QString str);
+
+    private:
+            QHBoxLayout* layBME;
+            QLabel*      labBMETags;
+            QLabel*      labBMEInfo;
+    };
+
     class MainWindow : public QMainWindow {
         Q_OBJECT
     public:
@@ -53,10 +65,12 @@ namespace Station {                        /*Station*/
         void Loop();
 
     private:
+        UI*          ui;
         StationBME*  widBME;
         QThread      thrBME;
         QPalette     palBack;
     };
+
 }    /*Station*/
 
 #endif
