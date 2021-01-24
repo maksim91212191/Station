@@ -78,7 +78,7 @@ namespace Station {                  /*Station*/
         }
 
         while (1) {
-            delay(10000);
+            delay(3000);
 
             float pressure = 0;
             float humidity = 0;
@@ -100,11 +100,11 @@ namespace Station {                  /*Station*/
                 temperature += bme280Data->getTemperature();
             }
 
-            QString str = QString::number(floor(pressure / 3) / 100);
+            QString str = QString::number(floor(pressure / 3));
             str += " mm Hg\n";
-            str += QString::number(floor(humidity / 3) / 100);
+            str += QString::number(floor(humidity / 3);
             str += " %\n";
-            str += QString::number(floor(temperature / 3) / 100);
+            str += QString::number(floor(temperature / 3));
             str += " °C\n";
 
             emit NewBMEData(str);
