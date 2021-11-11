@@ -20,7 +20,7 @@ set(SOURCES
 
 find_library(wiringPi_LIB wiringPi)
 
-set(Qt5_DIR "/usr/lib/arm-linux-gnueabihf/cmake/Qt5)"
+set(Qt5_DIR "/usr/lib/arm-linux-gnueabihf/cmake/Qt5")
 find_package(Qt5 COMPONENTS Gui Core Widgets REQUIRED)
 
 set(CMAKE_AUTOMOC ON)
