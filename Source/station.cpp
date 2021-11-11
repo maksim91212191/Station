@@ -137,11 +137,14 @@ namespace Station {                  /*Station*/
 
     MainWindow::~MainWindow() {
         thrBME.wait();
+        thrRemote.wait();
         delete widBME;
+        delete managerRemote;
     }
 
     void MainWindow::Loop() {
         thrBME.start();
+        thrRemote.start();
     }
 
     UI::UI(QWidget* parent)
