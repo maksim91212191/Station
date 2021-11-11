@@ -2,12 +2,7 @@ set(CMAKE_C_COMPILER_WORKS 1)
 set(CMAKE_CXX_COMPILER_WORKS 1)
 
 cmake_minimum_required(VERSION 2.6)
-set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
 project(stationmain)
-
-# INCLUDE(CMakeForceCompiler)
-# CMAKE_FORCE_C_COMPILER(gcc GNU)
-# CMAKE_FORCE_CXX_COMPILER(g++ GNU)
 
 set(EXEC_TARGET ${CMAKE_PROJECT_NAME})
 set(CMAKE_VERBOSE_MAKEFILE OFF)
@@ -24,8 +19,8 @@ endif()
 add_subdirectory(${CMAKE_SOURCE_DIR}/../ ${CMAKE_BINARY_DIR}/station)
 add_subdirectory(${CMAKE_SOURCE_DIR}/../../BME280 ${CMAKE_BINARY_DIR}/bme)
 
-find_package(Qt5Core REQUIRED)
-find_package(Qt5Widgets REQUIRED)
+set(Qt5_DIR "/usr/lib/arm-linux-gnueabihf/cmake/Qt5")
+find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 
 set(SOURCES ${SOURCES}
   ./Source/main.cpp

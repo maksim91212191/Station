@@ -20,11 +20,8 @@ set(SOURCES
 
 find_library(wiringPi_LIB wiringPi)
 
-set(CMAKE_PREFIX_PATH "/usr/include/arm-linux-gnueabihf/qt5")
-
-find_package(Qt5Core REQUIRED)
-find_package(Qt5Gui REQUIRED)
-find_package(Qt5Widgets REQUIRED)
+set(Qt5_DIR "/usr/lib/arm-linux-gnueabihf/cmake/Qt5)"
+find_package(Qt5 COMPONENTS Gui Core Widgets REQUIRED)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
