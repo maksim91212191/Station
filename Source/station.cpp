@@ -78,7 +78,7 @@ namespace Station {                  /*Station*/
         }
 
         while (1) {
-            delay(3000);
+            delay(1000);
 
             float pressure = 0;
             float humidity = 0;
@@ -90,18 +90,18 @@ namespace Station {                  /*Station*/
                     throw std::runtime_error("Multiplexer channel changing error");
                 }
                 BME::BMP280Data* bme280Data = bme280->getBMP280Data();
-                std::fprintf(logs, "pressure   : %.2f \tmm Hg\n", bme280Data->getPressure() / 1.3332239);
+                std::fprintf(logs, "pressure   : %.2f \thPa\n", bme280Data->getPressure());
                 std::fprintf(logs, "humidity   : %.2f \t%c\n", bme280Data->getHumidity(), '%');
                 std::fprintf(logs, "temperature: %.2f \t°C\n", bme280Data->getTemperature());
                 std::fprintf(logs, "altitude   : %.2f \tm\n\n", bme280Data->getAltitude());
 
-                pressure += bme280Data->getPressure() / 1.3332239;
+                pressure += bme280Data->getPressure();
                 humidity += bme280Data->getHumidity();
                 temperature += bme280Data->getTemperature();
             }
 
             QString str = QString::number(pressure / 3);
-            str += " mm Hg\n";
+            str += " hPa\n";
             str += QString::number(humidity / 3);
             str += " %\n";
             str += QString::number(temperature / 3);
@@ -115,7 +115,7 @@ namespace Station {                  /*Station*/
     MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent) {
 
-        setFixedSize(1024, 600);
+        setFixedSize(1024, 720);
 
         palBack.setColor(QPalette::Background, QColor(0, 189, 222));
         setAutoFillBackground(true);
@@ -126,12 +126,14 @@ namespace Station {                  /*Station*/
         connect(&thrBME, SIGNAL(started()), widBME, SLOT(Loop()));
 
         managerRemote = new ManagerRemote("127.0.0.1", 1111);
+        // Хардкодим ид для датчика, добавить конфига
+        managerRemote->AddRemote(0, RemoteTypes::A);
         managerRemote->moveToThread(&thrRemote);
         connect(&thrRemote, SIGNAL(started()), managerRemote, SLOT(Loop()));
 
         ui = new UI(this);
         connect(widBME, SIGNAL(NewBMEData(QString)), ui, SLOT(UpdateBMEInfo(QString)));
-        connect(managerRemote, SIGNAL(NewData(QString)), ui, SLOT(UpdateBMEInfo(QString)));
+        connect(managerRemote, SIGNAL(NewData(QString)), ui, SLOT(UpdateRemoteInfo(QString)));
         setCentralWidget(ui);
     }
 
@@ -161,8 +163,13 @@ namespace Station {                  /*Station*/
         setLayout(layBME);
     }
 
+
+    //TODO привести это к одному методу, заведя id для label
     void UI::UpdateBMEInfo(QString str) {
         labBMEInfo->setText(str);
+    }
+
+    void UI::UpdateRemoteInfo(QString str) {
         labRemote->setText(str);
     }
 

@@ -56,6 +56,7 @@ public:
 
 public slots:
     void UpdateBMEInfo(QString str);
+    void UpdateRemoteInfo(QString str);
 
 private:
     QHBoxLayout* layBME;

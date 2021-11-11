@@ -23,8 +23,10 @@ void Analyzer::Process(ReceiveData* _data) {
     switch (type) {
     case RemoteTypes::A:
         data = new DataA;
+        break;
     case RemoteTypes::B:
         data = new DataB;
+        break;
     default:
         break;
     }

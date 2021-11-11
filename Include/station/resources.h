@@ -47,8 +47,9 @@ struct DataA : public RawData {
         QString msg = "";
         msg += "Temperature = ";
         msg += QString::fromStdString(temperature);
-        msg += "\nPressure = ";
+        msg += " °C\nPressure = ";
         msg += QString::fromStdString(pressure);
+        msg += " hPa";
         return msg;
     }
 };
