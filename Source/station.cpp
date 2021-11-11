@@ -125,8 +125,13 @@ namespace Station {                  /*Station*/
         widBME->moveToThread(&thrBME);
         connect(&thrBME, SIGNAL(started()), widBME, SLOT(Loop()));
 
+        managerRemote = new ManagerRemote("127.0.0.1", 1111);
+        managerRemote->moveToThread(&thrRemote);
+        connect(&thrRemote, SIGNAL(started()), managerRemote, SLOT(Loop()));
+
         ui = new UI(this);
         connect(widBME, SIGNAL(NewBMEData(QString)), ui, SLOT(UpdateBMEInfo(QString)));
+        connect(managerRemote, SIGNAL(NewData(QString)), ui, SLOT(UpdateBMEInfo(QString)));
         setCentralWidget(ui);
     }
 
@@ -144,15 +149,18 @@ namespace Station {                  /*Station*/
 
         labBMETags = new QLabel("Pressure\nHumidity\nTemperature\n", this);
         labBMEInfo = new QLabel("", this);
+        labRemote  = new QLabel("", this);
 
         layBME = new QHBoxLayout();
         layBME->addWidget(labBMETags);
         layBME->addWidget(labBMEInfo);
+        layBME->addWidget(labRemote);
         setLayout(layBME);
     }
 
     void UI::UpdateBMEInfo(QString str) {
         labBMEInfo->setText(str);
+        labRemote->setText(str);
     }
 
 }   /*Station*/

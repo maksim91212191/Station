@@ -5,13 +5,22 @@ set(LIB_TARGET ${PROJECT_NAME}${PLATFORM_EXEC_SUFFIX})
 
 set(SOURCES
   ./Source/station.cpp
+  ./Source/server.cpp
+  ./Source/managerRemote.cpp
+  ./Source/analyzer.cpp
   )
 
  set(HEADERS
    ./Include/station/station.h
+   ./Include/station/server.h
+   ./Include/station/managerRemote.h
+   ./Include/station/analyzer.h
+   ./Include/station/resources.h
    )
 
 find_library(wiringPi_LIB wiringPi)
+
+set(CMAKE_PREFIX_PATH "/usr/include/arm-linux-gnueabihf/qt5")
 
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Gui REQUIRED)

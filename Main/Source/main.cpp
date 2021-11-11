@@ -9,9 +9,9 @@ int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
     QCoreApplication::setApplicationName("MeteoStation");
 
-    Station::MainWindow* station = new Station::MainWindow;
-    station->show();
+    Station::MainWindow* stationWindow = new Station::MainWindow;
+    stationWindow->show();
 
-    station->Loop();
+    stationWindow->Loop();
     return app.exec();
 }
