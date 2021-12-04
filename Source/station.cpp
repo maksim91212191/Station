@@ -100,14 +100,16 @@ namespace Station {                  /*Station*/
                 temperature += bme280Data->getTemperature();
             }
 
-            QString str = QString::number(pressure / 3);
-            str += " hPa\n";
-            str += QString::number(humidity / 3);
-            str += " %\n";
+            QString str = "";
+            str += "Temperature = ";
             str += QString::number(temperature / 3);
-            str += " °C\n";
+            str += " °C\nPressure = ";
+            str += QString::number(pressure / 3);
+            str += " hPa\nHumidity = ";
+            str += QString::number(humidity / 3);
+            str += "%";
 
-            emit NewBMEData(str);
+            emit NewBMEData(0, str);
         }
         fclose(logs);
     }
@@ -126,15 +128,20 @@ namespace Station {                  /*Station*/
         connect(&thrBME, SIGNAL(started()), widBME, SLOT(Loop()));
 
         managerRemote = new ManagerRemote("127.0.0.1", 1111);
-        // Хардкодим ид для датчика, добавить конфига
-        managerRemote->AddRemote(0, RemoteTypes::A);
+        // Хардкодим ид для датчика, добавить конфиги
+        managerRemote->AddRemote(1, RemoteTypes::A);
         managerRemote->moveToThread(&thrRemote);
         connect(&thrRemote, SIGNAL(started()), managerRemote, SLOT(Loop()));
 
-        ui = new UI(this);
-        connect(widBME, SIGNAL(NewBMEData(QString)), ui, SLOT(UpdateBMEInfo(QString)));
-        connect(managerRemote, SIGNAL(NewData(QString)), ui, SLOT(UpdateRemoteInfo(QString)));
+        ui = new UI(GetSensorsNum(), this);
+        connect(widBME, SIGNAL(NewBMEData(int, QString)), ui, SLOT(UpdateInfo(int, QString)));
+        connect(managerRemote, SIGNAL(NewData(int, QString)), ui, SLOT(UpdateInfo(int, QString)));
         setCentralWidget(ui);
+    }
+
+    int MainWindow::GetSensorsNum() const {
+        // 1 на станции + ремоуты
+        return 1 + (managerRemote->GetRemoteNum());
     }
 
     MainWindow::~MainWindow() {
@@ -149,28 +156,19 @@ namespace Station {                  /*Station*/
         thrRemote.start();
     }
 
-    UI::UI(QWidget* parent)
+    UI::UI(int labNum, QWidget* parent)
         : QWidget(parent) {
-
-        labBMETags = new QLabel("Pressure\nHumidity\nTemperature\n", this);
-        labBMEInfo = new QLabel("", this);
-        labRemote  = new QLabel("", this);
-
         layBME = new QHBoxLayout();
-        layBME->addWidget(labBMETags);
-        layBME->addWidget(labBMEInfo);
-        layBME->addWidget(labRemote);
+        for (int i = 0; i < labNum; ++i) {
+            labels[i] = new QLabel("", this);
+            layBME->addWidget(labels[i]);
+        }
         setLayout(layBME);
     }
 
-
-    //TODO привести это к одному методу, заведя id для label
-    void UI::UpdateBMEInfo(QString str) {
-        labBMEInfo->setText(str);
-    }
-
-    void UI::UpdateRemoteInfo(QString str) {
-        labRemote->setText(str);
+    void UI::UpdateInfo(int id, QString str) {
+        QString msg = "ID = " + QString::number(id) + '\n' + str;
+        labels[id]->setText(msg);
     }
 
 }   /*Station*/

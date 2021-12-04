@@ -1,8 +1,6 @@
 #ifndef MANAGER_REMOTE_H
 #define MANAGER_REMOTE_H
 
-// #pragma once
-
 #include <map>
 #include <string>
 #include <cstdint>
@@ -21,13 +19,14 @@ class ManagerRemote : public QObject {
 public:
     ManagerRemote(const std::string& host, uint16_t port);
     void AddRemote(uint8_t id, RemoteTypes type);
+    int GetRemoteNum() const;
     virtual ~ManagerRemote();
 public slots:
     void Loop();
 signals:
-    void NewData(QString str);
+    void NewData(int id, QString str);
 private:
-    void SendToUI(RawData* data);
+    void SendToUI(uint8_t id, RawData* data);
 
     Server*                        server;
     Analyzer*                      analyzer;

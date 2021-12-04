@@ -14,10 +14,13 @@ ManagerRemote::~ManagerRemote() {
     delete server;
 }
 
-void ManagerRemote::SendToUI(RawData* data) {
+void ManagerRemote::SendToUI(uint8_t id, RawData* data) {
     QString msg = data->GetString();
+    NewData(id, msg);
+}
 
-    NewData(msg);
+int ManagerRemote::GetRemoteNum() const {
+    return remotes.size();
 }
 
 void ManagerRemote::Loop() {
@@ -28,7 +31,7 @@ void ManagerRemote::Loop() {
         analyzer->Init(type);
         analyzer->Process(recData);
         RawData* data = analyzer->GetData();
-        SendToUI(data);
+        SendToUI(recData->id, data);
         analyzer->Reset();
     }
 }

@@ -39,7 +39,7 @@ public slots:
     void Loop();
 
 signals:
-    void NewBMEData(QString str);
+    void NewBMEData(int id, QString str);
 
 private:
     int*         BMENum;
@@ -52,17 +52,15 @@ private:
 class UI : public QWidget {
     Q_OBJECT
 public:
-    UI(QWidget* parent = nullptr);
+    UI(int labNum, QWidget* parent = nullptr);
+    void AddLabel(uint8_t id);
 
 public slots:
-    void UpdateBMEInfo(QString str);
-    void UpdateRemoteInfo(QString str);
+    void UpdateInfo(int id, QString str);
 
 private:
-    QHBoxLayout* layBME;
-    QLabel*      labBMETags;
-    QLabel*      labBMEInfo;
-    QLabel*      labRemote;
+    QHBoxLayout*               layBME;
+    std::map<uint8_t, QLabel*> labels;
 };
 
 
@@ -72,6 +70,7 @@ public:
     MainWindow(QWidget* parent = nullptr);
     virtual ~MainWindow();
     void Loop();
+    int GetSensorsNum() const;
 
 private:
     UI*            ui;
