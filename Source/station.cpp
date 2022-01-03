@@ -162,6 +162,9 @@ namespace Station {                  /*Station*/
         for (int i = 0; i < labNum; ++i) {
             labels[i] = new QLabel("", this);
             layBME->addWidget(labels[i]);
+
+            buttons.push_back(new PlotButton("&Plot", this));
+            connect(*buttons.end(), SIGNAL(pressed()), ui, SLOT(ShowPlot()));
         }
         setLayout(layBME);
     }
@@ -170,5 +173,8 @@ namespace Station {                  /*Station*/
         QString msg = "ID = " + QString::number(id) + '\n' + str;
         labels[id]->setText(msg);
     }
+
+    void PlotButton::PlotButton(uint8_t id, QWidget* parent)
+        : QPushButton("&Plot", parent) {}
 
 }   /*Station*/

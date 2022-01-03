@@ -5,6 +5,7 @@
 
 #include <QWidget>
 #include <QMainWindow>
+#include <QCustomPlot>
 #include <QString>
 #include <QPalette>
 #include <QLabel>
@@ -48,6 +49,25 @@ private:
     std::FILE*   logs;
 };
 
+class WindowGraph : public QMainWindow {
+public:
+    WindowGraph(QWidget* parent = nullptr);
+    Show(std::vector<int> data);
+private:
+
+};
+
+class PlotButton : public QPushButton {
+    Q_OBJECT
+public:
+    PlotButton(uint8_t id, QWidget* parent = nullptr);
+    inline uint8_t GetId() {
+        return id;
+    }
+private:
+    uint8_t id;
+};
+
 
 class UI : public QWidget {
     Q_OBJECT
@@ -57,12 +77,13 @@ public:
 
 public slots:
     void UpdateInfo(int id, QString str);
+    void ShowPlot(std::vector<int> data);
 
 private:
     QHBoxLayout*               layBME;
     std::map<uint8_t, QLabel*> labels;
+    std::vector<PlotButton*>   buttons;
 };
-
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
