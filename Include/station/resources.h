@@ -27,6 +27,7 @@ struct RawData {
 struct DataA : public RawData {
     std::string temperature;
     std::string pressure;
+    std::string humidity;
 
     virtual void Fill(char* msg, size_t size) {
         int check = 0;
@@ -39,7 +40,14 @@ struct DataA : public RawData {
             temperature += msg[i];
         }
         for (auto i = ++check; i < size; ++i) {
+            if (msg[i] == '_') {
+                check = i;
+                break;
+            }
             pressure += msg[i];
+        }
+        for (auto i = ++check; i < size; ++i) {
+            humidity += msg[i];
         }
     }
 
@@ -49,7 +57,9 @@ struct DataA : public RawData {
         msg += QString::fromStdString(temperature);
         msg += " °C\nPressure = ";
         msg += QString::fromStdString(pressure);
-        msg += " hPa";
+        msg += " hPa\nHumidity = ";
+        msg += QString::fromStdString(humidity);
+        msg += "%";
         return msg;
     }
 };
