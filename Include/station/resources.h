@@ -65,10 +65,20 @@ struct DataA : public RawData {
 };
 
 struct DataB : public RawData {
-    std::string co2;
+    std::string ppm;
 
-    virtual void Fill(char* msg, size_t size) {}
-    virtual QString GetString() const {return "";}
+    virtual void Fill(char* msg, size_t size) {
+        for (auto i = 0; i < size; ++i) {
+            ppm += msg[i];
+        }
+    }
+    virtual QString GetString() const {
+        QString msg = "";
+        msg += "CO2 Concentration = ";
+        msg += QString::fromStdString(ppm);
+        msg += " ppm";
+        return msg;
+    }
 };
 
 } /* namespace Station */
