@@ -130,6 +130,7 @@ namespace Station {                  /*Station*/
         managerRemote = new ManagerRemote("127.0.0.1", 1111);
         // Хардкодим ид для датчика, добавить конфиги
         managerRemote->AddRemote(1, RemoteTypes::A);
+        managerRemote->AddRemote(2, RemoteTypes::B);
         managerRemote->moveToThread(&thrRemote);
         connect(&thrRemote, SIGNAL(started()), managerRemote, SLOT(Loop()));
 
