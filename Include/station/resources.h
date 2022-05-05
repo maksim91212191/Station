@@ -75,9 +75,9 @@ struct DataB : public RawData {
     virtual QString GetString() const {
         QString msg = "";
         msg += "CO2 Concentration = ";
-        msg += QString::fromtStdString(ppm);
+        msg += QString::fromStdString(ppm);
         msg += " ppm";
-        return "";
+        return msg;
     }
 };
 
