@@ -1,4 +1,5 @@
 #include <station/managerRemote.h>
+#include <fstream>
 
 namespace Station {
 
@@ -25,8 +26,11 @@ int ManagerRemote::GetRemoteNum() const {
 
 void ManagerRemote::Loop() {
     ReceiveData* recData = new ReceiveData;
+    std::ofstream logRemote("logRemote.txt");
     while (1) {
         server->Receive(recData);
+        logRemote << "\nID: " << recData->id
+                  << "\nData: " << recData->data << std::endl;
         RemoteTypes type = remotes[recData->id];
         analyzer->Init(type);
         analyzer->Process(recData);
@@ -34,6 +38,7 @@ void ManagerRemote::Loop() {
         SendToUI(recData->id, data);
         analyzer->Reset();
     }
+    logRemote.close();
 }
 
 } /* namespace Station */

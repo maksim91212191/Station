@@ -162,6 +162,8 @@ namespace Station {                  /*Station*/
         layBME = new QHBoxLayout();
         for (int i = 0; i < labNum; ++i) {
             labels[i] = new QLabel("", this);
+            QFont front("Times New Roman", 20, QFont::Bold);
+            labels[i]->setFont(front);
             layBME->addWidget(labels[i]);
         }
         setLayout(layBME);
